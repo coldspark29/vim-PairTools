@@ -300,12 +300,16 @@ function! pairclamp#Expand()
 
             " Do actual expansion equivalent to <CR><CR><UP><TAB>
             call setline('.', line[:(column-1)])
-            call append(row,     repeat(' ', startSpace + &l:shiftwidth))
-            call append(row + 1, repeat(' ', startSpace) . line[(column):])
-            
+            if &expandtab
+                    call append(row,     repeat(' ', startSpace + &l:shiftwidth))
+                    call append(row + 1, repeat(' ', startSpace) . line[(column):])
+            else
+                    call append(row,     repeat('	', startSpace + 1))
+                    call append(row + 1, repeat('	', startSpace) . line[(column):])
+            endif
+
             " Place the cursor as though the user pressed tab for indentation
             call cursor(row + 1, startSpace + &l:shiftwidth + 1)
-            
             return 1
 
         endif
